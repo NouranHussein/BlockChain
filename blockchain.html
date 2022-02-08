@@ -50,8 +50,8 @@
         
 
         // parsing and collecting nodes and edges from the python
-        nodes = new vis.DataSet([{"id": "block 1", "label": "block 1", "shape": "dot"}, {"id": "block 2", "label": "block 2", "shape": "dot"}, {"id": "Attacker block 1", "label": "Attacker block 1", "shape": "dot"}, {"id": "block 3", "label": "block 3", "shape": "dot"}, {"id": "block 4", "label": "block 4", "shape": "dot"}, {"id": "Attacker block 2", "label": "Attacker block 2", "shape": "dot"}, {"id": "block 5", "label": "block 5", "shape": "dot"}, {"id": "block 6", "label": "block 6", "shape": "dot"}]);
-        edges = new vis.DataSet([{"from": "block 1", "to": "block 2"}, {"from": "block 2", "to": "Attacker block 1"}, {"from": "block 2", "to": "block 3"}, {"from": "block 3", "to": "block 4"}, {"from": "Attacker block 1", "to": "Attacker block 2"}, {"from": "block 4", "to": "block 5"}, {"from": "block 5", "to": "block 6"}]);
+        nodes = new vis.DataSet([{"id": "block 1", "label": "block 1", "shape": "dot"}, {"id": "block 2", "label": "block 2", "shape": "dot"}, {"id": "Attacker block 1", "label": "Attacker block 1", "shape": "dot"}, {"id": "block 3", "label": "block 3", "shape": "dot"}, {"id": "Attacker block 2", "label": "Attacker block 2", "shape": "dot"}, {"id": "block 4", "label": "block 4", "shape": "dot"}, {"id": "Attacker block 3", "label": "Attacker block 3", "shape": "dot"}]);
+        edges = new vis.DataSet([{"from": "block 1", "to": "block 2"}, {"from": "block 2", "to": "Attacker block 1"}, {"from": "block 2", "to": "block 3"}, {"from": "Attacker block 1", "to": "Attacker block 2"}, {"from": "block 3", "to": "block 4"}, {"from": "Attacker block 2", "to": "Attacker block 3"}]);
 
         // adding nodes and edges to the graph
         data = {nodes: nodes, edges: edges};

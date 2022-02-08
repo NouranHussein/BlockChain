@@ -9,7 +9,7 @@ difference = 2
 difficulty = 10
 attacker_computation_power = 40
 allUser_computation_power = 60
-rounds = 16
+rounds = 6
 attack_Success = 0
 ex = 0
 
@@ -51,7 +51,7 @@ class Block:
         return h.hexdigest()
 
     def __str__(self):
-        return "Block Hash: " + str(self.hash()) + "\nBlockNo: " + str(self.blockNo) + "\nHashes: " + str(
+        return "Block Hash: " + str(self.hash()) + "\nBlockNo: " + str(self.blockNo) + "\nNonce: " + str(
             self.nonce) + "\nprev Hashes: " + str(
             self.previous_hash) + "\n--------------"
 
@@ -141,7 +141,7 @@ class Blockchain:
                             net.add_edge("Attacker block " + str(self.attack - 1), "Attacker block " + str(self.attack))
                         self.add(block, True)
                         print(block)
-
+                        self.block2 = block
                 else:
                     if self.branch is True:
                         self.count2 += 1
@@ -156,7 +156,7 @@ class Blockchain:
                     if block.blockNo != 1 and self.attacker_won:
                         if ex == 0:
                             net.add_edge("Attacker block " + str(self.attack), "block " + str(block.blockNo))
-                        #self.attacker_won = False
+                        self.attacker_won = False
 
                 break
             else:
@@ -194,64 +194,67 @@ if cont is True:
     print("no overspending between transactions")
     print("transactions verified against integrity and Authentication")
 
-    # attacker_speed = int(rounds / ((attacker_computation_power/100) * rounds))
-    # user_speed = int(rounds / ((allUser_computation_power/100) * rounds))
-    # print(attacker_speed)
-    # print(user_speed)
-    # s = 0
-    # u = 0
-    # for n in range(rounds+1):
-    #     if s >= attacker_speed:
-    #         k = Block([t[n % 4] + "attack" + str(n + 1)])
-    #         blockchain.mine(k, blockchain.block)
-    #         s = 0
-    #     b = Block([t[n % 4]])
-    #     blockchain.mine(b, blockchain.block.next)
-    #     blockchain.block.next = b
-    #     blockchain.block = blockchain.block.next
-    #     s += 1
-    #     net.show("blockchain.html")
+    attacker_speed = int(rounds / ((attacker_computation_power/100) * rounds))
+    user_speed = int(rounds / ((allUser_computation_power/100) * rounds))
+    print("attacker step " + str(attacker_speed))
+    print("user step " + str(user_speed))
+    s = 0
+    u = 0
+    for n in range(rounds+1):
+        if s >= attacker_speed:
+            k = Block([t[n % 4] + "attack" + str(n + 1)])
+            blockchain.mine(k, blockchain.block)
+            s = 0
+        if u >= user_speed or n < 2:
+            b = Block([t[n % 4]])
+            blockchain.mine(b, blockchain.block.next)
+            blockchain.block.next = b
+            blockchain.block = blockchain.block.next
+            u = 0
+        u += 1
+        s += 1
+        net.show("blockchain.html")
 
-    attacker_computation_power = 10
-    allUser_computation_power = 90
+    # attacker_computation_power = 10
+    # allUser_computation_power = 90
+    #
+    # while attack_Success == 0:
+    #     ex = 1
+    #     testblockchain = Blockchain()
+    #     attacker_speed = int(rounds / ((attacker_computation_power / 100) * rounds))
+    #     user_speed = int(rounds / ((allUser_computation_power / 100) * rounds))
+    #     s = 0
+    #     u = 0
+    #     print(attacker_speed)
+    #     print(user_speed)
+    #     for n in range(rounds):
+    #         if s >= attacker_speed:
+    #             k = Block([t[n % 4] + "attack" + str(n + 1)])
+    #             testblockchain.mine(k, testblockchain.block)
+    #             s = 0
+    #         if u >= user_speed:
+    #             b = Block([t[n % 4]])
+    #             testblockchain.mine(b, testblockchain.block.next)
+    #             testblockchain.block.next = b
+    #             testblockchain.block = testblockchain.block.next
+    #             u = 0
+    #
+    #         if testblockchain.attacker_won is True:
+    #             attack_Success = 1
+    #             break
+    #         u += 1
+    #         s += 1
+    #
+    #     if attacker_computation_power < 100 and allUser_computation_power > 10 and attack_Success == 0:
+    #         attacker_computation_power += 5
+    #         allUser_computation_power -= 5
+    #     else:
+    #         break
+    #
+    #     while testblockchain.head is not None:
+    #         testblockchain.head = testblockchain.head.next
+    #
+    # print("Power of Attacker must be " + str(attacker_computation_power) + " to make successful attack.")
 
-    while attack_Success == 0:
-        ex = 1
-        testblockchain = Blockchain()
-        attacker_speed = int(rounds / ((attacker_computation_power / 100) * rounds))
-        user_speed = int(rounds / ((allUser_computation_power / 100) * rounds))
-        s = 0
-        u = 0
-        print(attacker_speed)
-        print(user_speed)
-        for n in range(rounds):
-            if s >= attacker_speed:
-                k = Block([t[n % 4] + "attack" + str(n + 1)])
-                testblockchain.mine(k, testblockchain.block)
-                s = 0
-            if u >= user_speed:
-                b = Block([t[n % 4]])
-                testblockchain.mine(b, testblockchain.block.next)
-                testblockchain.block.next = b
-                testblockchain.block = testblockchain.block.next
-                u = 0
-
-            if testblockchain.attacker_won is True:
-                attack_Success = 1
-                break
-            u += 1
-            s += 1
-
-        if attacker_computation_power < 100 and allUser_computation_power > 10 and attack_Success == 0:
-            attacker_computation_power += 5
-            allUser_computation_power -= 5
-        else:
-            break
-
-        while testblockchain.head is not None:
-            testblockchain.head = testblockchain.head.next
-
-    print("Power of Attacker must be " + str(attacker_computation_power) + " to make successful attack.")
-
-    # while blockchain.head is not None:
-    #     blockchain.head = blockchain.head.next
+    while blockchain.head is not None:
+        blockchain.head = blockchain.head.next
