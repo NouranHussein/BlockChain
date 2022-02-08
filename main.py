@@ -6,7 +6,7 @@ import rsa
 net = Network()
 records_history = {}
 difference = 2
-difficulty = 10
+difficulty = 19
 attacker_computation_power = 40
 allUser_computation_power = 60
 rounds = 6
@@ -163,6 +163,8 @@ class Blockchain:
                 block.nonce += 1
 
 
+
+
 blockchain = Blockchain()
 
 t = ["Alice pays Bob 50 LD", "Bob pays Nai 50 LD", "Nai gets from Bob 50 LD", "Bob gets from Alice 50 LD"]
@@ -194,26 +196,26 @@ if cont is True:
     print("no overspending between transactions")
     print("transactions verified against integrity and Authentication")
 
-    attacker_speed = int(rounds / ((attacker_computation_power/100) * rounds))
-    user_speed = int(rounds / ((allUser_computation_power/100) * rounds))
-    print("attacker step " + str(attacker_speed))
-    print("user step " + str(user_speed))
-    s = 0
-    u = 0
-    for n in range(rounds+1):
-        if s >= attacker_speed:
-            k = Block([t[n % 4] + "attack" + str(n + 1)])
-            blockchain.mine(k, blockchain.block)
-            s = 0
-        if u >= user_speed or n < 2:
-            b = Block([t[n % 4]])
-            blockchain.mine(b, blockchain.block.next)
-            blockchain.block.next = b
-            blockchain.block = blockchain.block.next
-            u = 0
-        u += 1
-        s += 1
-        net.show("blockchain.html")
+    # attacker_speed = int(rounds / ((attacker_computation_power/100) * rounds))
+    # user_speed = int(rounds / ((allUser_computation_power/100) * rounds))
+    # print("attacker step " + str(attacker_speed))
+    # print("user step " + str(user_speed))
+    # s = 0
+    # u = 0
+    # for n in range(rounds+1):
+    #     if s >= attacker_speed:
+    #         k = Block([t[n % 4] + "attack" + str(n + 1)])
+    #         blockchain.mine(k, blockchain.block)
+    #         s = 0
+    #     if u >= user_speed or n < 2:
+    #         b = Block([t[n % 4]])
+    #         blockchain.mine(b, blockchain.block.next)
+    #         blockchain.block.next = b
+    #         blockchain.block = blockchain.block.next
+    #         u = 0
+    #     u += 1
+    #     s += 1
+    #     net.show("blockchain.html")
 
     # attacker_computation_power = 10
     # allUser_computation_power = 90
@@ -256,5 +258,25 @@ if cont is True:
     #
     # print("Power of Attacker must be " + str(attacker_computation_power) + " to make successful attack.")
 
-    while blockchain.head is not None:
-        blockchain.head = blockchain.head.next
+    import time
+    while True:
+        before = time.time()
+        b = Block([t[n % 4]])
+        blockchain.mine(b, blockchain.block.next)
+        blockchain.block.next = b
+        blockchain.block = blockchain.block.next
+        after = time.time()
+        diff = after - before
+        print("difference: " + str(diff))
+        print("Difficulty: " + str(difficulty))
+        if diff > 1.6:
+            difficulty -= 1
+        elif diff < 0.6:
+            difficulty += 1
+        if (1.5 >= diff >= 0.5) or difficulty < 0:
+            break
+    print(difficulty)
+
+    # while blockchain.head is not None:
+    #     blockchain.head = blockchain.head.next
+
