@@ -203,8 +203,16 @@ if cont is True:
     print("no overspending between transactions")
     print("transactions verified against integrity and Authentication")
     if int(x) == 2:
-        attacker_speed = int(rounds / ((attacker_computation_power/100) * rounds))
-        user_speed = int(rounds / ((allUser_computation_power/100) * rounds))
+
+        if attacker_computation_power != 0:
+            attacker_speed = int(rounds / ((attacker_computation_power / 100) * rounds))
+        else:
+            attacker_speed = rounds
+        if allUser_computation_power != 0:
+            user_speed = int(rounds / ((allUser_computation_power / 100) * rounds))
+        else:
+            user_speed = rounds
+
         print("attacker step " + str(attacker_speed))
         print("user step " + str(user_speed))
         s = 0
@@ -234,8 +242,15 @@ if cont is True:
         while attack_Success == 0:
             ex = 1
             testblockchain = Blockchain()
-            attacker_speed = int(rounds / ((attacker_computation_power / 100) * rounds))
-            user_speed = int(rounds / ((allUser_computation_power / 100) * rounds))
+            if attacker_computation_power != 0:
+                attacker_speed = int(rounds / ((attacker_computation_power / 100) * rounds))
+            else:
+                attacker_speed = rounds
+            if allUser_computation_power != 0:
+                user_speed = int(rounds / ((allUser_computation_power / 100) * rounds))
+            else:
+                user_speed = rounds
+
             s = 0
             u = 0
             for n in range(rounds):
